@@ -10,23 +10,25 @@ import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/users")
 @RestController
 public class UserController {
     private int lastId = 1;
-    private final HashMap<Integer, User> users = new HashMap<>();
+    private final Map<Integer, User> users = new HashMap<>();
 
     @GetMapping
-    List<User> getAllUsers() {
-        return users.values().stream().toList();
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users.values());
     }
 
     @PostMapping
-    User addUser(@Valid @RequestBody User user) {
+    public User addUser(@Valid @RequestBody User user) {
         try {
             validateUser(user);
             if (user.getName() == null) {
@@ -44,7 +46,7 @@ public class UserController {
     }
 
     @PutMapping
-    User putUser(@Valid @RequestBody User newUser) {
+    public User putUser(@Valid @RequestBody User newUser) {
         try {
             validateUser(newUser);
             checkUserId(newUser);
@@ -60,7 +62,7 @@ public class UserController {
         }
     }
 
-    public static void validateUser(User user) throws ValidationException {
+    public static boolean validateUser(User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             throw new ValidationException("Неверно указан email");
         } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
@@ -68,9 +70,10 @@ public class UserController {
         } else if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Неверно указана дата рождения");
         }
+        return true;
     }
 
-    void checkUserId(User user) throws NotFoundId {
+    public void checkUserId(User user) throws NotFoundId {
         if (!users.containsKey(user.getId())) {
             throw new NotFoundId("Такого пользователя нет");
         }
