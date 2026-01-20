@@ -23,7 +23,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilm(Long id) {
-        if(!films.containsKey(id)) {
+        if (!films.containsKey(id)) {
             log.warn("Id {} фильма не был найден", id);
             throw new NotFoundId(id, FilmOrUser.FILM);
         }

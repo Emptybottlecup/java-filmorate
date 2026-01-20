@@ -31,8 +31,8 @@ public class UserService {
         List<User> friends = new ArrayList<>();
         User user = userStorage.getUser(idUser);
         User otherUser = userStorage.getUser(idOtherUser);
-        for(Long idFriend : user.getFriends()) {
-            if(otherUser.getFriends().contains(idFriend)) {
+        for (Long idFriend : user.getFriends()) {
+            if (otherUser.getFriends().contains(idFriend)) {
                 friends.add(userStorage.getUser(idFriend));
             }
         }
@@ -42,7 +42,7 @@ public class UserService {
     public List<User> getUserFriends(Long id) {
         List<User> friends = new ArrayList<>();
         User user = userStorage.getUser(id);
-        for(Long idFriend : user.getFriends()) {
+        for (Long idFriend : user.getFriends()) {
             friends.add(userStorage.getUser(idFriend));
         }
         return friends;
@@ -56,7 +56,7 @@ public class UserService {
     public User deleteFriends(Long idUser, Long idNewFriend) {
         User user = userStorage.getUser(idUser);
         User userFriend = userStorage.getUser(idNewFriend);
-        if(user.getFriends().remove(idNewFriend) && userFriend.getFriends().remove(idUser)) {
+        if (user.getFriends().remove(idNewFriend) && userFriend.getFriends().remove(idUser)) {
             log.debug("Пользователи {} и {} перестали быть", user.getLogin(), userFriend.getLogin());
         }
         return user;

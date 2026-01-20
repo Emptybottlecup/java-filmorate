@@ -26,7 +26,7 @@ public class FilmService {
     }
 
     public List<Film> getPopularFilms(int count) {
-        if(count < 0) {
+        if (count < 0) {
             log.warn("Неверное количество выводимых фильмов");
             throw new ConditionsNotMetException("Отсчет не может начинаться с отрицательного числа", "count");
         }
@@ -51,11 +51,11 @@ public class FilmService {
     public Film deleteLike(Long filmId, Long userId) {
         Film film = filmStorage.getFilm(filmId);
         User user = userService.getUser(userId);
-        if(!film.getLikes().contains(userId)) {
+        if (!film.getLikes().contains(userId)) {
             log.warn("У данного фильма {} не лайка от пользователя {}", film.getName(), user.getLogin());
             throw new NotHaveLike(film.getName(), user.getLogin());
         }
-        if(film.getLikes().remove(user.getId())) {
+        if (film.getLikes().remove(user.getId())) {
             log.debug("Был удален лайк у фильма {} пользователя {}", film.getName(), user.getLogin());
         }
         return film;

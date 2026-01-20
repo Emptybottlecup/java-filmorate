@@ -18,7 +18,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundId(final NotFoundId e) {
         String object = "Пользователя";
-        if(e.getObject().equals(FilmOrUser.FILM)) {
+        if (e.getObject().equals(FilmOrUser.FILM)) {
             object = "Фильма";
         }
         return new ErrorResponse("Неверный id.", object + " с id " + e.getId() + " не существует.");
