@@ -5,10 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class Film {
-    private int id;
+    private Set<Long> likes = new HashSet<>();
+    private Long id;
     @NotBlank
     private final String name;
     @NotBlank
