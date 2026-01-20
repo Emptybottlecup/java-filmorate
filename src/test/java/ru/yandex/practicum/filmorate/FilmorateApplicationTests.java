@@ -49,25 +49,25 @@ class FilmorateApplicationTests {
             Assertions.assertTrue(FilmService.validateFilm(validFilm1));
             FilmService.validateFilm(invalidFilmName);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указано название фильма", e.getMessage());
+            Assertions.assertEquals("Неверно указано название фильма.", e.getMessage());
         }
         try {
             Assertions.assertTrue(FilmService.validateFilm(validFilm2));
             FilmService.validateFilm(invalidFilDescription);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указано описание фильма", e.getMessage());
+            Assertions.assertEquals("Неверно указано описание фильма.", e.getMessage());
         }
         try {
             Assertions.assertTrue(FilmService.validateFilm(validFilm3));
             FilmService.validateFilm(invalidFilmReleaseDate);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указана дата релиза фильма", e.getMessage());
+            Assertions.assertEquals("Неверно указана дата релиза фильма.", e.getMessage());
         }
         try {
             Assertions.assertTrue(FilmService.validateFilm(validFilm4));
             FilmService.validateFilm(invalidFilmDuration);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указана продолжительности фильма", e.getMessage());
+            Assertions.assertEquals("Неверно указана продолжительности фильма.", e.getMessage());
         }
     }
 
@@ -90,34 +90,34 @@ class FilmorateApplicationTests {
             Assertions.assertTrue(UserService.validateUser(validUser1));
             UserService.validateUser(invalidUserEmail1);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указан email", e.getMessage());
+            Assertions.assertEquals("Неверно указан email.", e.getMessage());
         }
         try {
             UserService.validateUser(invalidUserEmail2);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указан email", e.getMessage());
+            Assertions.assertEquals("Неверно указан email.", e.getMessage());
         }
         try {
             UserService.validateUser(invalidUserLogin1);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указан логин", e.getMessage());
+            Assertions.assertEquals("Неверно указан логин.", e.getMessage());
         }
         try {
             UserService.validateUser(invalidUserLogin2);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указан логин", e.getMessage());
+            Assertions.assertEquals("Неверно указан логин.", e.getMessage());
         }
         try {
             Assertions.assertTrue(UserService.validateUser(validUser2));
             Assertions.assertTrue(UserService.validateUser(validUser3));
             UserService.validateUser(invalidUserBirthday1);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указана дата рождения", e.getMessage());
+            Assertions.assertEquals("Неверно указана дата рождения.", e.getMessage());
         }
         try {
             UserService.validateUser(invalidUserBirthday2);
         } catch (ValidationException e) {
-            Assertions.assertEquals("Неверно указана дата рождения", e.getMessage());
+            Assertions.assertEquals("Неверно указана дата рождения.", e.getMessage());
         }
     }
 
