@@ -66,8 +66,8 @@ public class FilmService {
         return filmStorage.updateFilmInformation(newFilm);
     }
 
-    public static boolean validateFilm(Film film) throws ValidationException {
-        if (film.getName().isEmpty()) {
+    public static boolean validateFilm(Film film) {
+        if (film.getName() == null || film.getName().isEmpty() || film.getName().isBlank()) {
             log.warn("Ошибка валидации: Название фильма не может быть пустым");
             throw new ValidationException("Неверно указано название фильма.");
         } else if (film.getDescription().length() > 200) {

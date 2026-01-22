@@ -76,8 +76,9 @@ public class UserService {
         return userStorage.updateUserInformation(newUser);
     }
 
-    public static boolean validateUser(User user) throws ValidationException {
-        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
+    public static boolean validateUser(User user) {
+        if (user.getEmail() == null || user.getEmail().isEmpty() || user.getEmail().isBlank() || !user.getEmail()
+                .contains("@")) {
             log.warn("Ошибка валидации пользователя: {} email не может существовать", user.getEmail());
             throw new ValidationException("Неверно указан email.");
         } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
