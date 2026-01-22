@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class NotHaveLike extends RuntimeException {
+public class NotHaveLikeException extends RuntimeException {
     private final String filmName;
     private final String userLogin;
 }

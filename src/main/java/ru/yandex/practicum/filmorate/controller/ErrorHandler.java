@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.Exceptions.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.Exceptions.NotFoundId.FilmOrUser;
-import ru.yandex.practicum.filmorate.Exceptions.NotFoundId.NotFoundId;
-import ru.yandex.practicum.filmorate.Exceptions.NotHaveLike;
+import ru.yandex.practicum.filmorate.Exceptions.NotFoundId.NotFoundIdException;
+import ru.yandex.practicum.filmorate.Exceptions.NotHaveLikeException;
 import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
@@ -16,7 +16,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerNotFoundId(final NotFoundId e) {
+    public ErrorResponse handlerNotFoundId(final NotFoundIdException e) {
         String object = "Пользователя";
         if (e.getObject().equals(FilmOrUser.FILM)) {
             object = "Фильма";
@@ -32,7 +32,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerNotHaveLike(final NotHaveLike e) {
+    public ErrorResponse handlerNotHaveLike(final NotHaveLikeException e) {
         return new ErrorResponse("Фильм не содержит лайк пользователя", "Фильм " + e.getFilmName() + " не " +
                 "содержит лайк от пользователя " + e.getUserLogin() + ".");
     }
@@ -41,6 +41,12 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerConditionsNotMetException(final ConditionsNotMetException e) {
         return new ErrorResponse(e.getType(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handlerThrowableException(final Throwable e) {
+        return new ErrorResponse("Ошибка", e.getMessage());
     }
 
 }

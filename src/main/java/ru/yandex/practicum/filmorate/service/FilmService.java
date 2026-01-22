@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exceptions.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.Exceptions.NotHaveLike;
+import ru.yandex.practicum.filmorate.Exceptions.NotHaveLikeException;
 import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
@@ -53,7 +53,7 @@ public class FilmService {
         User user = userService.getUser(userId);
         if (!film.getLikes().contains(userId)) {
             log.warn("У данного фильма {} не лайка от пользователя {}", film.getName(), user.getLogin());
-            throw new NotHaveLike(film.getName(), user.getLogin());
+            throw new NotHaveLikeException(film.getName(), user.getLogin());
         }
         if (film.getLikes().remove(user.getId())) {
             log.debug("Был удален лайк у фильма {} пользователя {}", film.getName(), user.getLogin());
