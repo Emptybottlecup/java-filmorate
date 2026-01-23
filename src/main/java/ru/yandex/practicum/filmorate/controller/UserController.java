@@ -1,81 +1,56 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.Exceptions.NotFoundId;
-import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Slf4j
 @RequestMapping("/users")
 @RestController
+@RequiredArgsConstructor
 public class UserController {
-    private int lastId = 1;
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
 
     @GetMapping
     public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getUserFriends(@PathVariable Long id) {
+        return userService.getUserFriends(id);
+    }
+
+    @GetMapping("{id}/friends/common/{friendId}")
+    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.getCommonFriends(id, friendId);
+    }
+
+    @PutMapping("{id}/friends/{friendId}")
+    public User addFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.addFriends(id, friendId);
+    }
+
+    @DeleteMapping("{id}/friends/{friendId}")
+    public User deleteFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.deleteFriends(id, friendId);
     }
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {
-        try {
-            validateUser(user);
-            if (user.getName() == null) {
-                user.setName(user.getLogin());
-            }
-            user.setId(lastId);
-            users.put(lastId, user);
-            ++lastId;
-            log.debug("Был добавлен новый пользователь {}", user.getLogin());
-            return user;
-        } catch (ValidationException e) {
-            log.warn(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+        return userService.addUser(user);
     }
 
     @PutMapping
     public User putUser(@Valid @RequestBody User newUser) {
-        try {
-            validateUser(newUser);
-            checkUserId(newUser);
-            users.put(newUser.getId(), newUser);
-            log.debug("Данные пользователя {} были обновлены", newUser.getLogin());
-            return newUser;
-        } catch (ValidationException e) {
-            log.warn(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (NotFoundId e) {
-            log.warn(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    public static boolean validateUser(User user) throws ValidationException {
-        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
-            throw new ValidationException("Неверно указан email");
-        } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Неверно указан логин");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Неверно указана дата рождения");
-        }
-        return true;
-    }
-
-    public void checkUserId(User user) throws NotFoundId {
-        if (!users.containsKey(user.getId())) {
-            throw new NotFoundId("Такого пользователя нет");
-        }
+        return userService.putUser(newUser);
     }
 }
