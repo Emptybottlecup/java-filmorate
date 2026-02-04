@@ -18,7 +18,6 @@ import ru.yandex.practicum.filmorate.model.users.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,35 +29,30 @@ public class UserService {
     private final FriendsRepository friendsRepository;
 
     public List<UserDto> getAllUsers() {
-        return userStorage.getAllUsers().stream().map(UserMapper::mapToUserDto).toList();
+        return userStorage.getAllUsers()
+                .stream()
+                .map(UserMapper::mapToUserDto).toList();
     }
 
     public UserDto getUser(Long id) {
-        return UserMapper.mapToUserDto(userStorage.getUser(id).orElseThrow(() -> new NotFoundIdException(id,
-                FilmOrUser.USER)));
+        return UserMapper.mapToUserDto(userStorage.getUser(id)
+                .orElseThrow(() -> new NotFoundIdException(id, FilmOrUser.USER)));
     }
 
     public List<FriendDto> getUserFriends(Long id) {
-        if(userStorage.getUser(id).isEmpty()) {
-            throw new NotFoundIdException(id, FilmOrUser.USER);
-        }
+        getUser(id);
 
-        List<FriendDto> friends = new ArrayList<>();
-
-        for(Friends friend : friendsRepository.getFriends(id)) {
-            friends.add(UserMapper.mapToFriendDto(userStorage.getUser(friend.getIdFriendUser()).get(),
-                    friend.isConfirmed()));
-        }
-
-        return friends;
+        return friendsRepository.getFriends(id)
+                .stream()
+                .map(friends -> UserMapper.mapToFriendDto(getUser(friends.getIdFriendUser()),
+                        friends.isConfirmed()))
+                .toList();
     }
 
     public FriendDto addFriends(long idUser, long idUserFriend) {
-        userStorage.getUser(idUser).orElseThrow(() -> new NotFoundIdException(idUserFriend,
-                FilmOrUser.USER));
+        getUser(idUser);
 
-        User userFriend = userStorage.getUser(idUserFriend).orElseThrow(() -> new NotFoundIdException(idUserFriend,
-                FilmOrUser.USER));
+        UserDto userFriend = getUser(idUserFriend);
 
         Friends friendsConnections = friendsRepository.getFriendsConnectionsTwoUsers(idUser, idUserFriend).orElseGet(
                 () -> {
@@ -83,6 +77,7 @@ public class UserService {
 
     public UserDto addUser(NewUserRequest newUserRequest) {
         validateUser(newUserRequest);
+
         if (userStorage.getUserByEmail(newUserRequest.getEmail()).isPresent()) {
            throw new ValidationException(String.format("Пользователь с email = %s уже существует", newUserRequest
                    .getEmail()));
@@ -132,12 +127,23 @@ public class UserService {
 
     public void deleteUser(long id) {
         getUser(id);
+
         if (!userStorage.deleteUser(id)) {
             throw new InternalServerException("Не получилось удалить пользователя");
         }
     }
 
-    public static boolean validateUser(NewUserRequest user) {
+    public List<FriendDto> getCommonFriends(Long id, Long friendId) {
+        getUser(id);
+        getUser(friendId);
+
+        return getUserFriends(id).stream()
+                .filter(friendDto -> friendsRepository.getFriendsConnectionsTwoUsers(
+                        friendId, friendDto.getId()).isPresent())
+                .toList();
+    }
+
+    private void validateUser(NewUserRequest user) {
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail()
                 .contains("@")) {
             log.warn("Ошибка валидации пользователя: {} email не может существовать", user.getEmail());
@@ -151,14 +157,5 @@ public class UserService {
         } if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
-        return true;
-    }
-
-    public List<FriendDto> getCommonFriends(Long id, Long friendId) {
-        getUser(id);
-        getUser(friendId);
-
-        return getUserFriends(id).stream().filter(friendDto -> friendsRepository.getFriendsConnectionsTwoUsers(
-                friendId, friendDto.getId()).isPresent()).toList();
     }
 }

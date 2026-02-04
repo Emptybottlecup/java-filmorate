@@ -46,7 +46,7 @@ public class UserMapper {
         return user;
     }
 
-    static public FriendDto mapToFriendDto(User user, boolean isConfirmed) {
+    static public FriendDto mapToFriendDto(UserDto user, boolean isConfirmed) {
         FriendDto friendDto = new FriendDto();
 
         friendDto.setIsConfirmed(isConfirmed);

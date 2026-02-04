@@ -1,14 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.user.FriendDto;
 import ru.yandex.practicum.filmorate.dto.user.NewUserRequest;
 import ru.yandex.practicum.filmorate.dto.user.UserDto;
 import ru.yandex.practicum.filmorate.dto.user.UserUpdateInformation;
-import ru.yandex.practicum.filmorate.model.users.Friends;
-import ru.yandex.practicum.filmorate.model.users.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.List;
