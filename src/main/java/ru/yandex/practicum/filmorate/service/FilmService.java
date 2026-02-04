@@ -3,21 +3,12 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Exceptions.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.Exceptions.NotHaveLikeException;
-import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FilmService {
+    /*
     private final FilmStorage filmStorage;
     private final UserService userService;
 
@@ -82,4 +73,5 @@ public class FilmService {
         }
         return true;
     }
+    */
 }

@@ -4,11 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.filmorate.Exceptions.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.Exceptions.NotFoundId.FilmOrUser;
-import ru.yandex.practicum.filmorate.Exceptions.NotFoundId.NotFoundIdException;
-import ru.yandex.practicum.filmorate.Exceptions.NotHaveLikeException;
-import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exceptions.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundId.FilmOrUser;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundId.NotFoundIdException;
+import ru.yandex.practicum.filmorate.exceptions.NotFriendsException;
+import ru.yandex.practicum.filmorate.exceptions.NotHaveLikeException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
 @RestControllerAdvice
@@ -22,6 +23,13 @@ public class ErrorHandler {
             object = "Фильма";
         }
         return new ErrorResponse("Неверный id.", object + " с id " + e.getId() + " не существует.");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlerNotFriendsException(final NotFriendsException e) {
+        return new ErrorResponse("Не получилось найти дружескую связь", String.format("Пользователь с id = %d не " +
+                "является другом пользователя с id = %d", e.getIdUser(), e.getIdUserFriend()));
     }
 
     @ExceptionHandler

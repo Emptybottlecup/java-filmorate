@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.Exceptions.NotFoundId;
+package ru.yandex.practicum.filmorate.exceptions.NotFoundId;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
