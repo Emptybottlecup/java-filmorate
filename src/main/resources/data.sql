@@ -1,0 +1,43 @@
+INSERT INTO mpas (mpa)
+VALUES ('G')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO mpas (mpa)
+VALUES ('PG')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO mpas (mpa)
+VALUES ('PG-13')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO mpas (mpa)
+VALUES ('R')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO mpas (mpa)
+VALUES ('NC-17')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO genres (genre)
+VALUES ('Комедия')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO genres (genre)
+VALUES ('Драма')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO genres (genre)
+VALUES ('Мультфильм')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO genres (genre)
+VALUES ('Триллер')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO genres (genre)
+VALUES ('Документальный')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO genres (genre)
+VALUES ('Боевик')
+ON CONFLICT DO NOTHING;

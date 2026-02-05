@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.exceptions.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundId.FilmOrUser;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundId.WhichObjectNotFound;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundId.NotFoundIdException;
 import ru.yandex.practicum.filmorate.exceptions.NotFriendsException;
 import ru.yandex.practicum.filmorate.exceptions.NotHaveLikeException;
@@ -18,10 +18,14 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundId(final NotFoundIdException e) {
-        String object = "Пользователя";
-        if (e.getObject().equals(FilmOrUser.FILM)) {
-            object = "Фильма";
+        String object = "";
+        switch (e.getObject()) {
+            case WhichObjectNotFound.USER -> object = "Пользователя";
+            case WhichObjectNotFound.FILM -> object = "Фильма";
+            case WhichObjectNotFound.MPA -> object = "MPA";
+            case WhichObjectNotFound.GENRE -> object = "Жанра";
         }
+
         return new ErrorResponse("Неверный id.", object + " с id " + e.getId() + " не существует.");
     }
 

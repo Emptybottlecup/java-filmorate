@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotFoundIdException extends RuntimeException {
     private final Long id;
-    private final FilmOrUser object;
+    private final WhichObjectNotFound object;
 }

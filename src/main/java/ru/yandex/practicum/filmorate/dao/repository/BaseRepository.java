@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.dao.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,10 +31,6 @@ public class BaseRepository<T> {
 
     protected boolean update(String query, Object... params) {
         return jdbc.update(query, params) > 0;
-    }
-
-    protected boolean delete(String query, long id) {
-        return jdbc.update(query, id) > 0;
     }
 
     protected Optional<Long> insert(String query, Object... params) {

@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.InternalServerException;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundId.FilmOrUser;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundId.WhichObjectNotFound;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundId.NotFoundIdException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.dao.FriendsRepository;
 import ru.yandex.practicum.filmorate.dto.user.FriendDto;
 import ru.yandex.practicum.filmorate.dto.user.NewUserRequest;
 import ru.yandex.practicum.filmorate.dto.user.UserDto;
@@ -15,6 +14,7 @@ import ru.yandex.practicum.filmorate.dto.user.UserUpdateInformation;
 import ru.yandex.practicum.filmorate.mappers.UserMapper;
 import ru.yandex.practicum.filmorate.model.users.Friends;
 import ru.yandex.practicum.filmorate.model.users.User;
+import ru.yandex.practicum.filmorate.storage.FriendsStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
-    private final FriendsRepository friendsRepository;
+    private final FriendsStorage friendsRepository;
 
     public List<UserDto> getAllUsers() {
         return userStorage.getAllUsers()
@@ -36,7 +36,7 @@ public class UserService {
 
     public UserDto getUser(Long id) {
         return UserMapper.mapToUserDto(userStorage.getUser(id)
-                .orElseThrow(() -> new NotFoundIdException(id, FilmOrUser.USER)));
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)));
     }
 
     public List<FriendDto> getUserFriends(Long id) {
@@ -97,8 +97,6 @@ public class UserService {
     }
 
     public UserDto updateUserInformation(UserUpdateInformation userUpdateInformation) {
-        Long id = userUpdateInformation.getId();
-
         if(!userUpdateInformation.hasId()) {
             throw new ValidationException("Для обновления данных пользователя необходимо передать id пользователя");
         }
@@ -110,7 +108,6 @@ public class UserService {
             }
         }
 
-
         if(userUpdateInformation.hasLogin()) {
             if(userStorage.getUserByLogin(userUpdateInformation.getLogin()).isPresent()) {
                 throw new ValidationException(String.format("Пользователь с логином = %s уже существует",
@@ -118,8 +115,10 @@ public class UserService {
             }
         }
 
+        Long id = userUpdateInformation.getId();
+
         User user = UserMapper.updateUserInformation(userStorage.getUser(id).orElseThrow(() ->
-                new NotFoundIdException(id, FilmOrUser.USER)), userUpdateInformation);
+                new NotFoundIdException(id, WhichObjectNotFound.USER)), userUpdateInformation);
 
         return UserMapper.mapToUserDto(userStorage.updateUserInformation(user).orElseThrow(() ->
                 new InternalServerException("Не получилось обновить данные пользователя")));

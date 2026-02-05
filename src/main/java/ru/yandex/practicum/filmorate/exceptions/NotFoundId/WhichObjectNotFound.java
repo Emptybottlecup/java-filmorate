@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.exceptions.NotFoundId;
 
-public enum FilmOrUser {
+public enum WhichObjectNotFound {
     USER,
-    FILM
+    FILM,
+    GENRE,
+    MPA
 }

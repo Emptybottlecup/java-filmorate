@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.dao.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -61,7 +61,7 @@ public class UserRepository extends BaseRepository<User> implements UserStorage 
 
     @Override
     public boolean deleteUser(long id) {
-        return delete(QUERY_DELETE_USER_BY_ID, id);
+        return update(QUERY_DELETE_USER_BY_ID, id);
     }
 
     @Override
