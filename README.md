@@ -2,66 +2,89 @@
 ## 🗺 Визуализация схемы базы данных (ER-диаграмма)
 Схема базы данных приложения для хранения информации о фильмах, оценках пользователей и дружбе.
 ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](database_sheme.png)
-## 🗄 Примеры SQL запросов
+## 🗄 Endpoints
+### 🎥 Фильмы (Films)
 
-### 1. Получение данных всех пользователей
-Возвращает информацию о всех пользователях.
+#### 1. Получение всех фильмов
+Возвращает список всех фильмов, сохраненных в базе.
 
-```sql
-SELECT *
-FROM films;
-```
+* **URL:** `/films`
+* **Method:** `GET`
+* **Success Code:** `200 OK`
 
-### 2. Получение данных всех фильмов.
-Возвращает информацию о всех фильмах.
-
-```sql
-SELECT *
-FROM films;
-```
-
-### 3. Получение топ-10 популярных фильмов
-Возвращает 10 фильмов с наибольшим количеством лайков.
-
-```sql
-SELECT f.name, 
-       COUNT(l.id_user) AS likes_count
-FROM films AS f
-LEFT JOIN likes AS l ON l.id_film = f.id
-GROUP BY f.id
-ORDER BY likes_count DESC
-LIMIT 10;
-```
-
-### 4. Получение общих друзей
-Находит пересечение списков друзей для пользователя с `id=1` и пользователя с `id=2`. Учитываются только подтвержденные записи дружбы.
-
-```sql
-SELECT u.name, u.email
-FROM friends AS f1
-JOIN friends AS f2 ON f1.id_friend_user = f2.id_friend_user
-JOIN users AS u ON u.id = f1.id_friend_user
-WHERE f1.id_user = 1 
-  AND f2.id_user = 2
-  AND f1.is_confirmed = true 
-  AND f2.is_confirmed = true;
-```
+**Пример ответа:**
+```json
+[
+    {
+        "id": 1,
+        "duration": 174,
+        "name": "jBoPOay2JErVS3C",
+        "description": "x70YrDBMkm8nJHhktTqHXMxGZUn6EPHthlqcxGvEo8o3uS7LVf",
+        "genres": [
+            {
+                "id": 6,
+                "genre": "Боевик"
+            }
+        ],
+        "releaseDate": "2004-09-04",
+        "mpa": {
+            "id": 1,
+            "mpaName": "G"
+        }
+    },
+    {
+        "id": 2,
+        "duration": 178,
+        "name": "qUyeb0m2zzuczAb",
+        "description": "syEE7XaQ6TBPTy2kl0R1P6AAXFi46RkUX8xu4V9qmA0yeTpgHb",
+        "genres": [
+            {
+                "id": 3,
+                "genre": "Мультфильм"
+            },
+            {
+                "id": 5,
+                "genre": "Документальный"
+            }
+        ],
+        "releaseDate": "1991-04-24",
+        "mpa": {
+            "id": 2,
+            "mpaName": "PG"
+        }
+    }
+]
+### ОБНОВЛЯЕТСЯ
 
 ## 📝 Описание схемы (DBML)
 <details>
 <summary>Развернуть исходный код DBML</summary>
 
 ```
+// Пользователи
 Table users {
-  id integer [primary key]
+  id integer [primary key, increment]
   name varchar
   email varchar
   login varchar
   birthday date
 }
 
+// Рейтинги (MPA)
+Table mpas {
+  id integer [primary key, increment]
+  mpa varchar [unique]
+}
+
+// Жанры
+Table genres {
+  id integer [primary key, increment]
+  genre varchar [unique]
+}
+
+// Фильмы
 Table films {
-  id integer [primary key]
+  id integer [primary key, increment]
   name varchar
   description varchar
   id_mpa integer
@@ -69,45 +92,46 @@ Table films {
   duration integer
 }
 
-Table likes {
-  id_film integer
-  id_user integer
-  indexes {
-    (id_film, id_user) [pk]
-  }
-}
-
-Table genres {
-  id_genre integer [primary key]
-  genre varchar
-}
-
-Table genres_and_films {
-  id_film integer
-  id_genre integer
-  indexes {
-    (id_film, id_genre) [pk]
-  }
-}
-
-Table mpas {
-  id_mpa integer [primary key]
-  mpa varchar
-}
-
+// Таблица Дружбы (связь пользователя с пользователем)
 Table friends {
   id_user integer
   id_friend_user integer
   is_confirmed boolean
+  
   indexes {
     (id_user, id_friend_user) [pk]
   }
 }
 
-Ref: "users"."id" < "likes"."id_user"
-Ref: "films"."id" < "likes"."id_film"
-Ref: "films"."id" < "genres_and_films"."id_film"
-Ref: "genres"."id_genre" < "genres_and_films"."id_genre"
-Ref: "users"."id" < "friends"."id_user"
-Ref: "users"."id" < "friends"."id_friend_user"
-Ref: "mpas"."id_mpa" < "films"."id_mpa"
+// Лайки фильмов
+Table likes {
+  id_user integer
+  id_film integer
+}
+
+// Связь фильмов и жанров
+Table genres_and_films {
+  id_film integer
+  id_genre integer
+  
+  indexes {
+    (id_film, id_genre) [pk]
+  }
+}
+
+// --- СВЯЗИ (Ref) ---
+
+// У фильма один рейтинг MPA
+Ref: films.id_mpa > mpas.id
+
+// Связи для Друзей (оба поля ссылаются на users)
+Ref: friends.id_user > users.id [delete: cascade]
+Ref: friends.id_friend_user > users.id [delete: cascade]
+
+// Связи для Лайков
+Ref: likes.id_film > films.id [delete: cascade]
+Ref: likes.id_user > users.id [delete: cascade]
+
+// Связи для Жанров фильмов
+Ref: genres_and_films.id_film > films.id [delete: cascade]
+Ref: genres_and_films.id_genre > genres.id [delete: cascade]
