@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GenreAndFilmService {
+public class GenreService {
     private final GenreRepository genreRepository;
     private final GenresAndFilmRepository genresAndFilmRepository;
 
@@ -31,16 +31,27 @@ public class GenreAndFilmService {
         return genres;
     }
 
+    public List<Genre> getAllGenres() {
+        return genreRepository.getAllGenres();
+    }
+
+    public Genre getGenreById(long id) {
+        return genreRepository.getGenreById(id)
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.GENRE));
+    }
+
     public List<Genre> addGenresOfFilm(long filmId, List<Genre> genres) {
         List<Genre> genresToReturn = new ArrayList<>();
-        for (Genre genre : genres) {
-            long genreId = genre.getId();
-            Genre genreToAdd = genreRepository.getGenreById(genreId)
-                    .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
+        if(genres != null) {
+            for (Genre genre : genres) {
+                long genreId = genre.getId();
+                Genre genreToAdd = genreRepository.getGenreById(genreId)
+                        .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
 
-            genresAndFilmRepository.insertGenreAndFilm(filmId, genreId);
-
-            genresToReturn.add(genreToAdd);
+                if(genresAndFilmRepository.insertGenreAndFilm(filmId, genreId).isPresent()) {
+                    genresToReturn.add(genreToAdd);
+                }
+            }
         }
         return genresToReturn;
     }
