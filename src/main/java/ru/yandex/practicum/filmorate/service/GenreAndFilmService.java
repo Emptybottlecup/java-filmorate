@@ -20,12 +20,11 @@ public class GenreAndFilmService {
 
     public List<Genre> getGenreOfFilmById(long filmId) {
         List<GenreAndFilm> genresOfFilm = genresAndFilmRepository.getAllGenreOfFilm(filmId);
-
         List<Genre> genres = new ArrayList<>();
 
         for(GenreAndFilm genreAndFilm : genresOfFilm) {
             long genreId = genreAndFilm.getIdGenre();
-            Genre genre = genreRepository.getGenreById(genreAndFilm.getIdGenre()).get();
+            Genre genre = genreRepository.getGenreById(genreId).get();
             genres.add(genre);
         }
 
@@ -38,6 +37,9 @@ public class GenreAndFilmService {
             long genreId = genre.getId();
             Genre genreToAdd = genreRepository.getGenreById(genreId)
                     .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
+
+            genresAndFilmRepository.insertGenreAndFilm(filmId, genreId);
+
             genresToReturn.add(genreToAdd);
         }
         return genresToReturn;

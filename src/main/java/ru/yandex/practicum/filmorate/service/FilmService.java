@@ -34,8 +34,15 @@ public class FilmService {
     private final MpaRepository mpaRepository;
     private final GenreAndFilmService genreAndFilmService;
 
-    public List<Film> getAllFilms() {
-        return filmStorage.getAllFilms();
+    public List<FilmDto> getAllFilms() {
+        return filmStorage.getAllFilms()
+                .stream()
+                .map(film ->{
+                    List<Genre> genres = genreAndFilmService.getGenreOfFilmById(film.getId());
+                    Mpa mpa = mpaRepository.getMpaById(film.getId()).get();
+                    return FilmMapper.mapToFilmDto(film, mpa, genres);
+                })
+                .toList();
     }
 
     public FilmDto getFilmById(long id) {
