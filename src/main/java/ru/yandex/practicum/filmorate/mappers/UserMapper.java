@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.dto.user.UserUpdateInformation;
 import ru.yandex.practicum.filmorate.model.users.User;
 
 public class UserMapper {
-    static public UserDto mapToUserDto(User user) {
+     public static UserDto mapToUserDto(User user) {
         UserDto userDto = new UserDto();
 
         userDto.setName(user.getName());
@@ -19,7 +19,7 @@ public class UserMapper {
         return userDto;
     }
 
-    static public User updateUserInformation(User user, UserUpdateInformation userUpdateInformation) {
+     public static User updateUserInformation(User user, UserUpdateInformation userUpdateInformation) {
         if (userUpdateInformation.hasEmail()) {
             user.setEmail(userUpdateInformation.getEmail());
         }
@@ -35,7 +35,7 @@ public class UserMapper {
         return user;
     }
 
-    static public User createUser(NewUserRequest newUserRequest) {
+     public static User createUser(NewUserRequest newUserRequest) {
         User user = new User();
 
         user.setBirthday(newUserRequest.getBirthday());
@@ -46,7 +46,7 @@ public class UserMapper {
         return user;
     }
 
-    static public FriendDto mapToFriendDto(UserDto user, boolean isConfirmed) {
+     public static FriendDto mapToFriendDto(UserDto user, boolean isConfirmed) {
         FriendDto friendDto = new FriendDto();
 
         friendDto.setIsConfirmed(isConfirmed);

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FilmMapper {
 
-    static public FilmDto mapToFilmDto(Film film, Mpa mpa, List<Genre> genres) {
+    public static FilmDto mapToFilmDto(Film film, Mpa mpa, List<Genre> genres) {
         FilmDto filmDto = new FilmDto();
 
         filmDto.setId(film.getId());
@@ -25,7 +25,7 @@ public class FilmMapper {
         return filmDto;
     }
 
-    static public Film createFilm(NewFilmRequest newFilm) {
+     public static Film createFilm(NewFilmRequest newFilm) {
         Film film = new Film();
 
         film.setDuration(newFilm.getDuration());
