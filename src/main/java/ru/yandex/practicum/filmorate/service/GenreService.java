@@ -22,7 +22,7 @@ public class GenreService {
         List<GenreAndFilm> genresOfFilm = genresAndFilmRepository.getAllGenreOfFilm(filmId);
         List<Genre> genres = new ArrayList<>();
 
-        for(GenreAndFilm genreAndFilm : genresOfFilm) {
+        for (GenreAndFilm genreAndFilm : genresOfFilm) {
             long genreId = genreAndFilm.getIdGenre();
             Genre genre = genreRepository.getGenreById(genreId).get();
             genres.add(genre);
@@ -42,13 +42,13 @@ public class GenreService {
 
     public List<Genre> addGenresOfFilm(long filmId, List<Genre> genres) {
         List<Genre> genresToReturn = new ArrayList<>();
-        if(genres != null) {
+        if (genres != null) {
             for (Genre genre : genres) {
                 long genreId = genre.getId();
                 Genre genreToAdd = genreRepository.getGenreById(genreId)
                         .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
 
-                if(genresAndFilmRepository.insertGenreAndFilm(filmId, genreId).isPresent()) {
+                if (genresAndFilmRepository.insertGenreAndFilm(filmId, genreId).isPresent()) {
                     genresToReturn.add(genreToAdd);
                 }
             }

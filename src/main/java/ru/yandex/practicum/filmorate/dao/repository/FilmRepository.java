@@ -52,7 +52,7 @@ public class FilmRepository extends BaseRepository<Film> implements FilmStorage 
     }
 
     @Override
-    public Optional<Film> updateUserInformation(Film film) {
+    public Optional<Film> updateFilmInformation(Film film) {
         boolean isUpdated = update(QUERY_UPDATE_FILM_INFORMATION,
                 film.getName(),
                 film.getDescription(),

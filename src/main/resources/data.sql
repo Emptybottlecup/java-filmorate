@@ -1,43 +1,43 @@
-INSERT INTO mpas (name)
-VALUES ('G')
-ON CONFLICT DO NOTHING;
+MERGE INTO mpas (name) 
+KEY(name) 
+VALUES ('G');
 
-INSERT INTO mpas (name)
-VALUES ('PG')
-ON CONFLICT DO NOTHING;
+MERGE INTO mpas (name)
+KEY(name)
+VALUES ('PG');
 
-INSERT INTO mpas (name)
-VALUES ('PG-13')
-ON CONFLICT DO NOTHING;
+MERGE INTO mpas (name)
+KEY(name)
+VALUES ('PG-13');
 
-INSERT INTO mpas (name)
-VALUES ('R')
-ON CONFLICT DO NOTHING;
+MERGE INTO mpas (name)
+KEY (name)
+VALUES ('R');
 
-INSERT INTO mpas (name)
-VALUES ('NC-17')
-ON CONFLICT DO NOTHING;
+MERGE INTO mpas (name)
+KEY (name)
+VALUES ('NC-17');
 
-INSERT INTO genres (name)
-VALUES ('Комедия')
-ON CONFLICT DO NOTHING;
+MERGE INTO genres (name)
+KEY (name)
+VALUES ('Комедия');
 
-INSERT INTO genres (name)
-VALUES ('Драма')
-ON CONFLICT DO NOTHING;
+MERGE INTO genres (name)
+KEY (name)
+VALUES ('Драма');
 
-INSERT INTO genres (name)
-VALUES ('Мультфильм')
-ON CONFLICT DO NOTHING;
+MERGE INTO genres (name)
+KEY (name)
+VALUES ('Мультфильм');
 
-INSERT INTO genres (name)
-VALUES ('Триллер')
-ON CONFLICT DO NOTHING;
+MERGE INTO genres (name)
+KEY (name)
+VALUES ('Триллер');
 
-INSERT INTO genres (name)
-VALUES ('Документальный')
-ON CONFLICT DO NOTHING;
+MERGE INTO genres (name)
+KEY (name)
+VALUES ('Документальный');
 
-INSERT INTO genres (name)
-VALUES ('Боевик')
-ON CONFLICT DO NOTHING;
+MERGE INTO genres (name)
+KEY (name)
+VALUES ('Боевик');

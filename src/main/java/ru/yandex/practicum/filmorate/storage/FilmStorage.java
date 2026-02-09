@@ -13,5 +13,5 @@ public interface FilmStorage {
 
     Optional<Film> addNewFilm(Film film);
 
-    Optional<Film> updateUserInformation(Film film);
+    Optional<Film> updateFilmInformation(Film film);
 }

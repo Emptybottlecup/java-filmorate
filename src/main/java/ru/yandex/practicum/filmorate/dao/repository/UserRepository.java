@@ -31,7 +31,7 @@ public class UserRepository extends BaseRepository<User> implements UserStorage 
     }
 
     @Override
-    public Optional<User> getUser(Long id) {
+    public Optional<User> getUserById(Long id) {
         return getOne(QUERY_GET_USER_BY_ID, id);
     }
 
@@ -60,7 +60,7 @@ public class UserRepository extends BaseRepository<User> implements UserStorage 
     }
 
     @Override
-    public boolean deleteUser(long id) {
+    public boolean deleteUserById(long id) {
         return update(QUERY_DELETE_USER_BY_ID, id);
     }
 

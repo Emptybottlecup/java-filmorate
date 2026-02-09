@@ -36,7 +36,7 @@ public class FilmService {
     public List<FilmDto> getAllFilms() {
         return filmStorage.getAllFilms()
                 .stream()
-                .map(film ->{
+                .map(film -> {
                     List<Genre> genres = genreService.getGenreOfFilmById(film.getId());
                     Mpa mpa = mpaService.getMpaById(film.getIdMpa());
                     return FilmMapper.mapToFilmDto(film, mpa, genres);
@@ -56,7 +56,10 @@ public class FilmService {
     }
 
     public FilmDto addFilm(NewFilmRequest newFilmRequest) {
-        validateFilm(newFilmRequest);
+
+        if (newFilmRequest.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new ValidationException("Дата релиза фильма должна быть позже 28.12.1895");
+        }
 
         Mpa mpa = mpaService.getMpaById(newFilmRequest.getMpa().getId());
 
@@ -89,10 +92,6 @@ public class FilmService {
         log.debug("Был удален лайк у фильма {} пользователя {}", filmDto.getName(), userDto.getLogin());
     }
 
-    public List<Like> getLikes(long filmId) {
-        return likeService.getLikesOfFilm(filmId);
-    }
-
     public Like addLike(Long filmId, Long userId) {
         FilmDto filmDto = getFilmById(filmId);
         UserDto user = userService.getUser(userId);
@@ -103,10 +102,7 @@ public class FilmService {
 
 
     public FilmDto putFilm(FilmUpdateInformation filmUpdateInformation) {
-        if(!filmUpdateInformation.hasId()) {
-            throw new ValidationException("Для обновления данных фильма необходимо передать его id");
-        }
-        if(filmUpdateInformation.hasMpa()) {
+        if (filmUpdateInformation.hasMpa()) {
             mpaService.getMpaById(filmUpdateInformation.getMpa().getId());
         }
 
@@ -115,9 +111,9 @@ public class FilmService {
 
 
         Mpa mpa = mpaService.getMpaById(film.getIdMpa());
-        List<Genre> genres;
 
-        if(filmUpdateInformation.hasGenres()) {
+        List<Genre> genres;
+        if (filmUpdateInformation.hasGenres()) {
             genreService.deleteGenreOfFilm(film.getId());
             genres = genreService.addGenresOfFilm(film.getId(), filmUpdateInformation.getGenres());
         } else {
@@ -126,29 +122,10 @@ public class FilmService {
 
         FilmMapper.updateFilmInformation(film, filmUpdateInformation);
 
-        filmStorage.updateUserInformation(film).orElseThrow(() ->
+        filmStorage.updateFilmInformation(film).orElseThrow(() ->
                 new InternalServerException("Не получилось обновить данные фильма"));
 
 
         return FilmMapper.mapToFilmDto(film, mpa, genres);
-    }
-
-    private void validateFilm(NewFilmRequest film) {
-        if (film.getName() == null || film.getName().isEmpty() || film.getName().isBlank()) {
-            log.warn("Ошибка валидации: Название фильма не может быть пустым");
-            throw new ValidationException("Неверно указано название фильма.");
-        } else if (film.getDescription().length() > 200) {
-            log.warn("Ошибка валидации: Описание фильма не может состоять больше чем из 200 символов");
-            throw new ValidationException("Неверно указано описание фильма.");
-        } else if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("Ошибка валидации: Дата релиза фильма не может быть раньше {}", LocalDate.of(1895, 12, 28));
-            throw new ValidationException("Неверно указана дата релиза фильма.");
-        } else if (film.getDuration() < 1) {
-            log.warn("Ошибка валидации: Продолжительность фильма не может быть меньше 1");
-            throw new ValidationException("Неверно указана продолжительности фильма.");
-        } else if (film.getMpa() == null) {
-            log.warn("Ошибка валидации: Mpa не был указан");
-            throw new ValidationException("Неверно указан Mpa.");
-        }
     }
 }

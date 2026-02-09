@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FilmMapper {
 
-    static public FilmDto mapToFilmDto (Film film, Mpa mpa, List<Genre> genres) {
+    static public FilmDto mapToFilmDto(Film film, Mpa mpa, List<Genre> genres) {
         FilmDto filmDto = new FilmDto();
 
         filmDto.setId(film.getId());
@@ -38,19 +38,19 @@ public class FilmMapper {
     }
 
     static public Film updateFilmInformation(Film film, FilmUpdateInformation filmUpdateInformation) {
-        if(filmUpdateInformation.hasDescription()) {
+        if (filmUpdateInformation.hasDescription()) {
             film.setDescription(filmUpdateInformation.getDescription());
         }
-        if(filmUpdateInformation.hasMpa()) {
+        if (filmUpdateInformation.hasMpa()) {
             film.setIdMpa(filmUpdateInformation.getMpa().getId());
         }
-        if(filmUpdateInformation.hasDuration()) {
+        if (filmUpdateInformation.hasDuration()) {
             film.setDuration(filmUpdateInformation.getDuration());
         }
-        if(filmUpdateInformation.hasName()) {
+        if (filmUpdateInformation.hasName()) {
             film.setName(filmUpdateInformation.getName());
         }
-        if(filmUpdateInformation.hasReleaseDate()) {
+        if (filmUpdateInformation.hasReleaseDate()) {
             film.setReleaseDate(filmUpdateInformation.getReleaseDate());
         }
         return film;

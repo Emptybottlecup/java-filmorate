@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.user.FriendDto;
@@ -28,7 +29,7 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     public List<FriendDto> getUserFriends(@PathVariable Long id) {
-        return userService.getUserFriends(id);
+        return userService.getFriendsById(id);
     }
 
     @GetMapping("{id}/friends/common/{friendId}")
@@ -52,13 +53,13 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto addUser(@RequestBody NewUserRequest user) {
+    public UserDto addUser(@RequestBody @Valid NewUserRequest user) {
         return userService.addUser(user);
     }
 
 
     @PutMapping
-    public UserDto updateUserInformation(@RequestBody UserUpdateInformation
+    public UserDto updateUserInformation(@RequestBody @Valid UserUpdateInformation
             updateUserInformation) {
         return userService.updateUserInformation(updateUserInformation);
     }

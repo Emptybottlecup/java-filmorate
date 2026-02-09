@@ -12,8 +12,7 @@ import java.util.Optional;
 @Repository
 public class LikesRepository extends BaseRepository<Like>{
     private final String QUERY_GET_ALL_LIKES_OF_FILM = "SELECT * FROM likes WHERE id_film = ?";
-    private final String QUERY_INSERT_LIKE = "INSERT INTO likes (id_film, id_user) VALUES (?,?) " +
-            "ON CONFLICT DO NOTHING";
+    private final String QUERY_INSERT_LIKE = "INSERT INTO likes (id_film, id_user) VALUES (?,?)";
     private final String QUERY_DELETE_LIKE = "DELETE FROM likes WHERE id_film = ? AND id_user = ?";
 
     public LikesRepository(JdbcTemplate jdbc, RowMapper<Like> mapper) {

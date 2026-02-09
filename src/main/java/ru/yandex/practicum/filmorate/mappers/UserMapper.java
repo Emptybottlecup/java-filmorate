@@ -20,19 +20,19 @@ public class UserMapper {
     }
 
     static public User updateUserInformation(User user, UserUpdateInformation userUpdateInformation) {
-        if(userUpdateInformation.hasEmail()) {
+        if (userUpdateInformation.hasEmail()) {
             user.setEmail(userUpdateInformation.getEmail());
         }
-        if(userUpdateInformation.hasLogin()) {
+        if (userUpdateInformation.hasLogin()) {
             user.setLogin(userUpdateInformation.getLogin());
         }
-        if(userUpdateInformation.hasBirthDay()) {
+        if (userUpdateInformation.hasBirthDay()) {
             user.setBirthday(userUpdateInformation.getBirthday());
         }
-        if(userUpdateInformation.hasName()) {
+        if (userUpdateInformation.hasName()) {
             user.setName(userUpdateInformation.getName());
         }
-        return  user;
+        return user;
     }
 
     static public User createUser(NewUserRequest newUserRequest) {
