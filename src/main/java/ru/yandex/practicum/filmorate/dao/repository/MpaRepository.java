@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Repository
 public class MpaRepository extends BaseRepository<Mpa> {
-    private final String QUERY_GET_ALL_MPAS = "SELECT * FROM mpas ORDER BY id ASC";
-    private final String QUERY_GET_MPA_BY_ID = "SELECT * FROM mpas WHERE id = ?";
+    private static final String QUERY_GET_ALL_MPAS = "SELECT * FROM mpas ORDER BY id ASC";
+    private static final String QUERY_GET_MPA_BY_ID = "SELECT * FROM mpas WHERE id = ?";
 
     public MpaRepository(JdbcTemplate jdbc, RowMapper<Mpa> mapper) {
         super(jdbc, mapper);

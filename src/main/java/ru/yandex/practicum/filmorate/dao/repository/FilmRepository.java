@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.model.films.Film;
-import ru.yandex.practicum.filmorate.model.users.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.List;
@@ -12,10 +11,10 @@ import java.util.Optional;
 
 @Repository
 public class FilmRepository extends BaseRepository<Film> implements FilmStorage {
-    private final String QUERY_GET_ALL_FILMS = "SELECT * FROM films";
-    private final String QUERY_GET_FILM_BY_ID = "SELECT * FROM films WHERE id = ?";
-    private final String QUERY_INSERT_NEW_FILM = "INSERT INTO films (name, description, id_mpa, release_date, duration)" + " VALUES(?, ?, ?, ?, ?)";
-    private final String QUERY_UPDATE_FILM_INFORMATION = "UPDATE films SET name = ?, description = ?, id_mpa = ?," + "release_date = ?, duration = ? WHERE id = ?";
+    private static final String QUERY_GET_ALL_FILMS = "SELECT * FROM films";
+    private static final String QUERY_GET_FILM_BY_ID = "SELECT * FROM films WHERE id = ?";
+    private static final String QUERY_INSERT_NEW_FILM = "INSERT INTO films (name, description, id_mpa, release_date, duration)" + " VALUES(?, ?, ?, ?, ?)";
+    private static final String QUERY_UPDATE_FILM_INFORMATION = "UPDATE films SET name = ?, description = ?, id_mpa = ?," + "release_date = ?, duration = ? WHERE id = ?";
 
     public FilmRepository(JdbcTemplate jdbc, FilmRowMapper mapper) {
         super(jdbc, mapper);

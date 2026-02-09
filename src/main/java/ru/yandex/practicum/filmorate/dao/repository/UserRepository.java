@@ -11,13 +11,13 @@ import java.util.Optional;
 
 @Repository
 public class UserRepository extends BaseRepository<User> implements UserStorage {
-    private final String QUERY_GET_ALL_USERS = "SELECT * FROM users";
-    private final String QUERY_GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-    private final String QUERY_INSERT_NEW_USER = "INSERT INTO users (name, email, login, birthday)" + " VALUES(?, ?, ?, ?)";
-    private final String QUERY_UPDATE_USER_INFORMATION = "UPDATE users SET name = ?, email = ?, login = ?," + "birthday = ? WHERE id = ?";
-    private final String QUERY_GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
-    private final String QUERY_GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
-    private final String QUERY_DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
+    private static final String QUERY_GET_ALL_USERS = "SELECT * FROM users";
+    private static final String QUERY_GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
+    private static final String QUERY_INSERT_NEW_USER = "INSERT INTO users (name, email, login, birthday)" + " VALUES(?, ?, ?, ?)";
+    private static final String QUERY_UPDATE_USER_INFORMATION = "UPDATE users SET name = ?, email = ?, login = ?," + "birthday = ? WHERE id = ?";
+    private static final String QUERY_GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
+    private static final String QUERY_GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
+    private static final String QUERY_DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
 
     public UserRepository(JdbcTemplate jdbc, UserRowMapper mapper) {
         super(jdbc, mapper);

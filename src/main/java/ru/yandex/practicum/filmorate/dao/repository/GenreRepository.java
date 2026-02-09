@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Repository
 public class GenreRepository extends BaseRepository<Genre> {
-    private final String QUERY_GET_ALL_GENRES = "SELECT * FROM genres ORDER BY id ASC";
-    private final String QUERY_GET_GENRE_BY_ID = "SELECT * FROM genres WHERE id = ?";
+    private static final String QUERY_GET_ALL_GENRES = "SELECT * FROM genres ORDER BY id ASC";
+    private static final String QUERY_GET_GENRE_BY_ID = "SELECT * FROM genres WHERE id = ?";
 
     public GenreRepository(JdbcTemplate jdbc, RowMapper<Genre> mapper) {
         super(jdbc, mapper);

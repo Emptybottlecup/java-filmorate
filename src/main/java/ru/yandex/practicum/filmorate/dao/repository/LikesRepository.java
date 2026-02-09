@@ -4,16 +4,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Like;
-import ru.yandex.practicum.filmorate.model.films.GenreAndFilm;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class LikesRepository extends BaseRepository<Like> {
-    private final String QUERY_GET_ALL_LIKES_OF_FILM = "SELECT * FROM likes WHERE id_film = ?";
-    private final String QUERY_INSERT_LIKE = "INSERT INTO likes (id_film, id_user) VALUES (?,?)";
-    private final String QUERY_DELETE_LIKE = "DELETE FROM likes WHERE id_film = ? AND id_user = ?";
+    private static final String QUERY_GET_ALL_LIKES_OF_FILM = "SELECT * FROM likes WHERE id_film = ?";
+    private static final String QUERY_INSERT_LIKE = "INSERT INTO likes (id_film, id_user) VALUES (?,?)";
+    private static final String QUERY_DELETE_LIKE = "DELETE FROM likes WHERE id_film = ? AND id_user = ?";
 
     public LikesRepository(JdbcTemplate jdbc, RowMapper<Like> mapper) {
         super(jdbc, mapper);

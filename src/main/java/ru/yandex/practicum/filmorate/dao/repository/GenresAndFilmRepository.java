@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Repository
 public class GenresAndFilmRepository extends BaseRepository<GenreAndFilm> {
-    private final String QUERY_GET_ALL_GENRES_OF_FILM = "SELECT * FROM genres_and_films WHERE id_film = ?";
-    private final String QUERY_INSERT_GENRE_AND_FILM = "INSERT INTO genres_and_films (id_film, id_genre) VALUES (?,?) ";
-    private final String QUERY_DELETE_ALL_GENRE_AND_FILM_BY_ID = "DELETE FROM genres_and_films WHERE id_film = ?";
+    private static final String QUERY_GET_ALL_GENRES_OF_FILM = "SELECT * FROM genres_and_films WHERE id_film = ?";
+    private static final String QUERY_INSERT_GENRE_AND_FILM = "INSERT INTO genres_and_films (id_film, id_genre) VALUES (?,?) ";
+    private static final String QUERY_DELETE_ALL_GENRE_AND_FILM_BY_ID = "DELETE FROM genres_and_films WHERE id_film = ?";
 
     public GenresAndFilmRepository(JdbcTemplate jdbc, RowMapper<GenreAndFilm> mapper) {
         super(jdbc, mapper);
