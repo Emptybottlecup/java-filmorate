@@ -12,7 +12,7 @@ public class FilmDto {
     private Long id;
     private int duration;
     private String name;
-    private Mpa Mpa;
+    private Mpa mpa;
     private String description;
     private List<Genre> genres;
     private LocalDate releaseDate;
