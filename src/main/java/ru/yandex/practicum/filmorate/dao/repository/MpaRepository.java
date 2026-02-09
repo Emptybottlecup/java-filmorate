@@ -21,7 +21,7 @@ public class MpaRepository extends BaseRepository<Mpa> {
         return getMany(QUERY_GET_ALL_MPAS);
     }
 
-    public Optional<Mpa> getMpaById(long id ) {
+    public Optional<Mpa> getMpaById(long id) {
         return getOne(QUERY_GET_MPA_BY_ID, id);
     }
 

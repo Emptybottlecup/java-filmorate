@@ -7,7 +7,8 @@ import java.time.LocalDate;
 
 @Data
 public class UserUpdateInformation {
-    @NotNull @Positive
+    @NotNull
+    @Positive
     private Long id;
     private String name;
     @Email

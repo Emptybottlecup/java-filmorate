@@ -10,7 +10,8 @@ import java.util.List;
 
 @Data
 public class FilmUpdateInformation {
-    @NotNull @Positive
+    @NotNull
+    @Positive
     private Long id;
     @Positive
     private Integer duration;
@@ -34,7 +35,7 @@ public class FilmUpdateInformation {
         return description != null && !description.isBlank();
     }
 
-    public boolean hasMpa(){
+    public boolean hasMpa() {
         return mpa != null;
     }
 

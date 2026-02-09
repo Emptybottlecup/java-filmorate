@@ -33,8 +33,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFriendsException(final NotFriendsException e) {
-        return new ErrorResponse("Не получилось найти дружескую связь", String.format("Пользователь с id = %d не " +
-                "является другом пользователя с id = %d", e.getIdUser(), e.getIdUserFriend()));
+        return new ErrorResponse("Не получилось найти дружескую связь", String.format("Пользователь с id = %d не " + "является другом пользователя с id = %d", e.getIdUser(), e.getIdUserFriend()));
     }
 
     @ExceptionHandler
@@ -52,8 +51,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotHaveLike(final NotHaveLikeException e) {
-        return new ErrorResponse("Фильм не содержит лайк пользователя", "Фильм " + e.getFilmName() + " не " +
-                "содержит лайк от пользователя " + e.getUserLogin() + ".");
+        return new ErrorResponse("Фильм не содержит лайк пользователя", "Фильм " + e.getFilmName() + " не " + "содержит лайк от пользователя " + e.getUserLogin() + ".");
     }
 
     @ExceptionHandler

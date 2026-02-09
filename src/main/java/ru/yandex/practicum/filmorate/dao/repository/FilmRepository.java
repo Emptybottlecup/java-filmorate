@@ -14,10 +14,8 @@ import java.util.Optional;
 public class FilmRepository extends BaseRepository<Film> implements FilmStorage {
     private final String QUERY_GET_ALL_FILMS = "SELECT * FROM films";
     private final String QUERY_GET_FILM_BY_ID = "SELECT * FROM films WHERE id = ?";
-    private final String QUERY_INSERT_NEW_FILM = "INSERT INTO films (name, description, id_mpa, release_date, duration)" +
-            " VALUES(?, ?, ?, ?, ?)";
-    private final String QUERY_UPDATE_FILM_INFORMATION = "UPDATE films SET name = ?, description = ?, id_mpa = ?," +
-            "release_date = ?, duration = ? WHERE id = ?";
+    private final String QUERY_INSERT_NEW_FILM = "INSERT INTO films (name, description, id_mpa, release_date, duration)" + " VALUES(?, ?, ?, ?, ?)";
+    private final String QUERY_UPDATE_FILM_INFORMATION = "UPDATE films SET name = ?, description = ?, id_mpa = ?," + "release_date = ?, duration = ? WHERE id = ?";
 
     public FilmRepository(JdbcTemplate jdbc, FilmRowMapper mapper) {
         super(jdbc, mapper);
@@ -35,12 +33,7 @@ public class FilmRepository extends BaseRepository<Film> implements FilmStorage 
 
     @Override
     public Optional<Film> addNewFilm(Film film) {
-        Optional<Long> id = insert(QUERY_INSERT_NEW_FILM,
-                film.getName(),
-                film.getDescription(),
-                film.getIdMpa(),
-                film.getReleaseDate(),
-                film.getDuration());
+        Optional<Long> id = insert(QUERY_INSERT_NEW_FILM, film.getName(), film.getDescription(), film.getIdMpa(), film.getReleaseDate(), film.getDuration());
 
         if (id.isEmpty()) {
             return Optional.empty();
@@ -53,16 +46,9 @@ public class FilmRepository extends BaseRepository<Film> implements FilmStorage 
 
     @Override
     public Optional<Film> updateFilmInformation(Film film) {
-        boolean isUpdated = update(QUERY_UPDATE_FILM_INFORMATION,
-                film.getName(),
-                film.getDescription(),
-                film.getIdMpa(),
-                film.getReleaseDate(),
-                film.getDuration(),
-                film.getId()
-        );
+        boolean isUpdated = update(QUERY_UPDATE_FILM_INFORMATION, film.getName(), film.getDescription(), film.getIdMpa(), film.getReleaseDate(), film.getDuration(), film.getId());
 
-        if(!isUpdated) {
+        if (!isUpdated) {
             return Optional.empty();
         }
         return Optional.of(film);

@@ -14,8 +14,7 @@ public class LikeService {
     private final LikesRepository likesRepository;
 
     public Like addLike(long idFilm, long idUser) {
-        return likesRepository.addLike(idFilm, idUser)
-                .orElseThrow(() -> new InternalServerException("Не получилось добавить лайк"));
+        return likesRepository.addLike(idFilm, idUser).orElseThrow(() -> new InternalServerException("Не получилось добавить лайк"));
     }
 
     public void deleteLike(long idFilm, long idUser) {

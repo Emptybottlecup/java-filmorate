@@ -9,10 +9,13 @@ import java.time.LocalDate;
 public class NewUserRequest {
     @NotBlank
     private String name;
-    @NotBlank @Email
+    @NotBlank
+    @Email
     private String email;
-    @NotBlank @Pattern(regexp = "\\S+")
+    @NotBlank
+    @Pattern(regexp = "\\S+")
     private String login;
-    @NotNull @PastOrPresent
+    @NotNull
+    @PastOrPresent
     private LocalDate birthday;
 }

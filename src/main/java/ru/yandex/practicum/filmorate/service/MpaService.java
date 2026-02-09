@@ -19,7 +19,6 @@ public class MpaService {
     }
 
     public Mpa getMpaById(long id) {
-        return mpaRepository.getMpaById(id)
-                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.MPA));
+        return mpaRepository.getMpaById(id).orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.MPA));
     }
 }

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 @Component
 public class GenreAndFilmRowMapper implements RowMapper<GenreAndFilm> {
     @Override
-    public GenreAndFilm mapRow(ResultSet rs,int num) throws SQLException {
+    public GenreAndFilm mapRow(ResultSet rs, int num) throws SQLException {
         GenreAndFilm genreAndFilm = new GenreAndFilm();
 
         genreAndFilm.setIdFilm(rs.getLong("id_film"));

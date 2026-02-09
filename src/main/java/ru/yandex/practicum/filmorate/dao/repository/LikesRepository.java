@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class LikesRepository extends BaseRepository<Like>{
+public class LikesRepository extends BaseRepository<Like> {
     private final String QUERY_GET_ALL_LIKES_OF_FILM = "SELECT * FROM likes WHERE id_film = ?";
     private final String QUERY_INSERT_LIKE = "INSERT INTO likes (id_film, id_user) VALUES (?,?)";
     private final String QUERY_DELETE_LIKE = "DELETE FROM likes WHERE id_film = ? AND id_user = ?";
@@ -28,7 +28,7 @@ public class LikesRepository extends BaseRepository<Like>{
     }
 
     public Optional<Like> addLike(long idFilm, long idUser) {
-        if(update(QUERY_INSERT_LIKE, idFilm, idUser)) {
+        if (update(QUERY_INSERT_LIKE, idFilm, idUser)) {
             Like like = new Like();
             like.setIdFilm(idFilm);
             like.setIdUser(idUser);

@@ -19,11 +19,11 @@ public class GenresAndFilmRepository extends BaseRepository<GenreAndFilm> {
     }
 
     public List<GenreAndFilm> getAllGenreOfFilm(long id) {
-        return getMany(QUERY_GET_ALL_GENRES_OF_FILM,id);
+        return getMany(QUERY_GET_ALL_GENRES_OF_FILM, id);
     }
 
     public Optional<GenreAndFilm> insertGenreAndFilm(long filmId, long genreId) {
-        if(update(QUERY_INSERT_GENRE_AND_FILM, filmId, genreId)) {
+        if (update(QUERY_INSERT_GENRE_AND_FILM, filmId, genreId)) {
             GenreAndFilm genreAndFilm = new GenreAndFilm();
             genreAndFilm.setIdFilm(filmId);
             genreAndFilm.setIdGenre(genreId);

@@ -34,19 +34,15 @@ public class FilmService {
     private final LikeService likeService;
 
     public List<FilmDto> getAllFilms() {
-        return filmStorage.getAllFilms()
-                .stream()
-                .map(film -> {
-                    List<Genre> genres = genreService.getGenreOfFilmById(film.getId());
-                    Mpa mpa = mpaService.getMpaById(film.getIdMpa());
-                    return FilmMapper.mapToFilmDto(film, mpa, genres);
-                })
-                .toList();
+        return filmStorage.getAllFilms().stream().map(film -> {
+            List<Genre> genres = genreService.getGenreOfFilmById(film.getId());
+            Mpa mpa = mpaService.getMpaById(film.getIdMpa());
+            return FilmMapper.mapToFilmDto(film, mpa, genres);
+        }).toList();
     }
 
     public FilmDto getFilmById(long id) {
-        Film film = filmStorage.getFilmById(id)
-                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.FILM));
+        Film film = filmStorage.getFilmById(id).orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.FILM));
 
         Mpa mpa = mpaService.getMpaById(film.getIdMpa());
 
@@ -63,8 +59,7 @@ public class FilmService {
 
         Mpa mpa = mpaService.getMpaById(newFilmRequest.getMpa().getId());
 
-        Film film = filmStorage.addNewFilm(FilmMapper.createFilm(newFilmRequest))
-                .orElseThrow(() -> new InternalServerException("Не получилось создать фильм"));
+        Film film = filmStorage.addNewFilm(FilmMapper.createFilm(newFilmRequest)).orElseThrow(() -> new InternalServerException("Не получилось создать фильм"));
 
 
         List<Genre> genres = genreService.addGenresOfFilm(film.getId(), newFilmRequest.getGenres());
@@ -77,10 +72,7 @@ public class FilmService {
             log.warn("Неверное количество выводимых фильмов");
             throw new ConditionsNotMetException("Отсчет не может начинаться с отрицательного числа", "count");
         }
-        return getAllFilms().stream()
-                .sorted(Comparator.comparingInt((filmDto) -> likeService.getLikesOfFilm(filmDto.getId())
-                        .size() * -1))
-                .limit(count).toList();
+        return getAllFilms().stream().sorted(Comparator.comparingInt((filmDto) -> likeService.getLikesOfFilm(filmDto.getId()).size() * -1)).limit(count).toList();
     }
 
     public void deleteLike(Long filmId, Long userId) {
@@ -106,8 +98,7 @@ public class FilmService {
             mpaService.getMpaById(filmUpdateInformation.getMpa().getId());
         }
 
-        Film film = filmStorage.getFilmById(filmUpdateInformation.getId())
-                .orElseThrow(() -> new NotFoundIdException(filmUpdateInformation.getId(), WhichObjectNotFound.FILM));
+        Film film = filmStorage.getFilmById(filmUpdateInformation.getId()).orElseThrow(() -> new NotFoundIdException(filmUpdateInformation.getId(), WhichObjectNotFound.FILM));
 
 
         Mpa mpa = mpaService.getMpaById(film.getIdMpa());
@@ -122,8 +113,7 @@ public class FilmService {
 
         FilmMapper.updateFilmInformation(film, filmUpdateInformation);
 
-        filmStorage.updateFilmInformation(film).orElseThrow(() ->
-                new InternalServerException("Не получилось обновить данные фильма"));
+        filmStorage.updateFilmInformation(film).orElseThrow(() -> new InternalServerException("Не получилось обновить данные фильма"));
 
 
         return FilmMapper.mapToFilmDto(film, mpa, genres);

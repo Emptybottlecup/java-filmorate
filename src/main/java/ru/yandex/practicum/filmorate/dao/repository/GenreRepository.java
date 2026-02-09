@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class GenreRepository extends BaseRepository<Genre>{
+public class GenreRepository extends BaseRepository<Genre> {
     private final String QUERY_GET_ALL_GENRES = "SELECT * FROM genres ORDER BY id ASC";
     private final String QUERY_GET_GENRE_BY_ID = "SELECT * FROM genres WHERE id = ?";
 
@@ -21,7 +21,7 @@ public class GenreRepository extends BaseRepository<Genre>{
         return getMany(QUERY_GET_ALL_GENRES);
     }
 
-    public Optional<Genre> getGenreById(long id ) {
+    public Optional<Genre> getGenreById(long id) {
         return getOne(QUERY_GET_GENRE_BY_ID, id);
     }
 }

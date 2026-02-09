@@ -29,8 +29,7 @@ public class FriendsRepository extends BaseRepository<Friends> {
         friends.setIdUser(idUser);
         friends.setIdFriendUser(idUserFriend);
         friends.setConfirmed(false);
-        if(update(QUERY_ADD_NEW_FRIENDS_REQUEST, friends.getIdUser(), friends.getIdFriendUser(), friends
-                .isConfirmed())) {
+        if (update(QUERY_ADD_NEW_FRIENDS_REQUEST, friends.getIdUser(), friends.getIdFriendUser(), friends.isConfirmed())) {
             return Optional.of(friends);
         }
         return Optional.empty();

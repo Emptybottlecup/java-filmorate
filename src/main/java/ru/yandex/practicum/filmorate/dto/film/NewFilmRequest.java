@@ -14,7 +14,8 @@ public class NewFilmRequest {
     private int duration;
     @NotBlank
     private String name;
-    @NotBlank @Size(max = 200)
+    @NotBlank
+    @Size(max = 200)
     private String description;
     @NotNull
     private Mpa mpa;
