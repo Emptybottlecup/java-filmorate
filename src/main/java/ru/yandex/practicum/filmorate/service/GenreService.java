@@ -10,7 +10,9 @@ import ru.yandex.practicum.filmorate.model.films.Genre;
 import ru.yandex.practicum.filmorate.model.films.GenreAndFilm;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -41,15 +43,19 @@ public class GenreService {
     }
 
     public List<Genre> addGenresOfFilm(long filmId, List<Genre> genres) {
+        Set<Long> setId = new HashSet<>();
         List<Genre> genresToReturn = new ArrayList<>();
         if (genres != null) {
             for (Genre genre : genres) {
-                long genreId = genre.getId();
-                Genre genreToAdd = genreRepository.getGenreById(genreId)
-                        .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
+                if(!setId.contains(genre.getId())) {
+                    long genreId = genre.getId();
+                    Genre genreToAdd = genreRepository.getGenreById(genreId)
+                            .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
 
-                if (genresAndFilmRepository.insertGenreAndFilm(filmId, genreId).isPresent()) {
-                    genresToReturn.add(genreToAdd);
+                    if (genresAndFilmRepository.insertGenreAndFilm(filmId, genreId).isPresent()) {
+                        setId.add(genreId);
+                        genresToReturn.add(genreToAdd);
+                    }
                 }
             }
         }
