@@ -37,7 +37,7 @@ public class FilmMapper {
         return film;
     }
 
-    static public Film updateFilmInformation(Film film, FilmUpdateInformation filmUpdateInformation) {
+    public static Film updateFilmInformation(Film film, FilmUpdateInformation filmUpdateInformation) {
         if (filmUpdateInformation.hasDescription()) {
             film.setDescription(filmUpdateInformation.getDescription());
         }
