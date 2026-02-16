@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class Friends {
-    long idUser;
-    long idFriendUser;
-    boolean isConfirmed;
+    private long idUser;
+    private long idFriendUser;
+    private boolean isConfirmed;
 }
 

@@ -36,7 +36,9 @@ public class UserService {
     public List<FriendDto> getFriendsById(Long id) {
         getUser(id);
 
-        return friendsService.getFriendsById(id).stream().map(friends -> UserMapper.mapToFriendDto(getUser(friends.getIdFriendUser()), friends.isConfirmed())).toList();
+        return friendsService.getFriendsById(id).stream()
+                .map(friends -> UserMapper.mapToFriendDto(getUser(friends.getIdFriendUser()), friends.isConfirmed()))
+                .toList();
     }
 
     public FriendDto addFriends(long idUser, long idUserFriend) {

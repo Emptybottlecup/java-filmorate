@@ -1,9 +1,9 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.dto;
 
 import lombok.Data;
 
 @Data
-public class Like {
+public class LikeDto {
     private long idFilm;
     private long idUser;
 }

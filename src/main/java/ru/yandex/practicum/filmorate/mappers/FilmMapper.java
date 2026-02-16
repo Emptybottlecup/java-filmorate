@@ -1,25 +1,27 @@
 package ru.yandex.practicum.filmorate.mappers;
 
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.dto.film.FilmDto;
 import ru.yandex.practicum.filmorate.dto.film.FilmUpdateInformation;
 import ru.yandex.practicum.filmorate.dto.film.NewFilmRequest;
+import ru.yandex.practicum.filmorate.dto.genre.GenreDto;
+import ru.yandex.practicum.filmorate.dto.mpa.MpaDto;
 import ru.yandex.practicum.filmorate.model.films.Film;
-import ru.yandex.practicum.filmorate.model.films.Genre;
-import ru.yandex.practicum.filmorate.model.films.Mpa;
 
 import java.util.List;
 
+@UtilityClass
 public class FilmMapper {
 
-    public static FilmDto mapToFilmDto(Film film, Mpa mpa, List<Genre> genres) {
+    public static FilmDto mapToFilmDto(Film film, MpaDto mpaDto, List<GenreDto> genresDto) {
         FilmDto filmDto = new FilmDto();
 
         filmDto.setId(film.getId());
         filmDto.setName(film.getName());
         filmDto.setDuration(film.getDuration());
         filmDto.setReleaseDate(film.getReleaseDate());
-        filmDto.setMpa(mpa);
-        filmDto.setGenres(genres);
+        filmDto.setMpa(mpaDto);
+        filmDto.setGenres(genresDto);
         filmDto.setDescription(film.getDescription());
 
         return filmDto;
@@ -42,7 +44,7 @@ public class FilmMapper {
             film.setDescription(filmUpdateInformation.getDescription());
         }
         if (filmUpdateInformation.hasMpa()) {
-            film.setIdMpa(filmUpdateInformation.getMpa().getId());
+            film.setIdMpa(filmUpdateInformation.getNewMpaRequest().getId());
         }
         if (filmUpdateInformation.hasDuration()) {
             film.setDuration(filmUpdateInformation.getDuration());

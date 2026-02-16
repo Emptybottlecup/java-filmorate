@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.LikeDto;
 import ru.yandex.practicum.filmorate.dto.film.FilmDto;
 import ru.yandex.practicum.filmorate.dto.film.FilmUpdateInformation;
 import ru.yandex.practicum.filmorate.dto.film.NewFilmRequest;
@@ -43,7 +44,7 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Like addLike(@PathVariable Long id, @PathVariable Long userId) {
+    public LikeDto addLike(@PathVariable Long id, @PathVariable Long userId) {
         return filmService.addLike(id, userId);
     }
 

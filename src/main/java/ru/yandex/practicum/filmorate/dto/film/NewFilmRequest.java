@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.dto.film;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.model.films.Genre;
-import ru.yandex.practicum.filmorate.model.films.Mpa;
+import ru.yandex.practicum.filmorate.dto.genre.NewGenreRequest;
+import ru.yandex.practicum.filmorate.dto.mpa.NewMpaRequest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,8 +18,8 @@ public class NewFilmRequest {
     @Size(max = 200)
     private String description;
     @NotNull
-    private Mpa mpa;
-    private List<Genre> genres;
+    private NewMpaRequest mpa;
+    private List<NewGenreRequest> genres;
     @PastOrPresent
     private LocalDate releaseDate;
 }

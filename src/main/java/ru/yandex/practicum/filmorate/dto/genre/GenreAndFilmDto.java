@@ -1,9 +1,9 @@
-package ru.yandex.practicum.filmorate.model.films;
+package ru.yandex.practicum.filmorate.dto.genre;
 
 import lombok.Data;
 
 @Data
-public class GenreAndFilm {
+public class GenreAndFilmDto {
     private long idFilm;
     private long idGenre;
 }
