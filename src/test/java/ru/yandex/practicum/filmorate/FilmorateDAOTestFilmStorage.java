@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.dto.film.FilmUpdateInformation;
 import ru.yandex.practicum.filmorate.dto.mpa.NewMpaRequest;
 import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.model.films.Film;
-import ru.yandex.practicum.filmorate.model.films.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
