@@ -18,8 +18,8 @@ public class FilmUpdateInformation {
     private String name;
     @Size(max = 200)
     private String description;
-    private NewMpaRequest newMpaRequest;
-    private List<NewGenreRequest> newGenreRequests;
+    private NewMpaRequest mpa;
+    private List<NewGenreRequest> genres;
     @PastOrPresent
     private LocalDate releaseDate;
 
@@ -36,11 +36,11 @@ public class FilmUpdateInformation {
     }
 
     public boolean hasMpa() {
-        return newMpaRequest != null;
+        return mpa != null;
     }
 
     public boolean hasGenres() {
-        return newGenreRequests != null;
+        return genres != null;
     }
 
     public boolean hasReleaseDate() {

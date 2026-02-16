@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataIntegrityViolationException;
 import ru.yandex.practicum.filmorate.dto.film.FilmUpdateInformation;
+import ru.yandex.practicum.filmorate.dto.mpa.NewMpaRequest;
 import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.model.films.Film;
 import ru.yandex.practicum.filmorate.model.films.Mpa;
@@ -81,8 +82,8 @@ public class FilmorateDAOTestFilmStorage {
         Film film = films.getFirst();
 
         FilmUpdateInformation filmUpdateInformation = new FilmUpdateInformation();
-        Mpa mpa = new Mpa();
-        mpa.setId(2);
+        NewMpaRequest mpa = new NewMpaRequest();
+        mpa.setId(2L);
         filmUpdateInformation.setMpa(mpa);
         filmUpdateInformation.setDuration(1);
         filmUpdateInformation.setName("Oracle");

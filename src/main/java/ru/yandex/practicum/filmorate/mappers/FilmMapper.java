@@ -44,7 +44,7 @@ public class FilmMapper {
             film.setDescription(filmUpdateInformation.getDescription());
         }
         if (filmUpdateInformation.hasMpa()) {
-            film.setIdMpa(filmUpdateInformation.getNewMpaRequest().getId());
+            film.setIdMpa(filmUpdateInformation.getMpa().getId());
         }
         if (filmUpdateInformation.hasDuration()) {
             film.setDuration(filmUpdateInformation.getDuration());

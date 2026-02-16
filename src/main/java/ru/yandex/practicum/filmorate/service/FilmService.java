@@ -115,7 +115,7 @@ public class FilmService {
 
     public FilmDto putFilm(FilmUpdateInformation filmUpdateInformation) {
         if (filmUpdateInformation.hasMpa()) {
-            mpaService.getMpaById(filmUpdateInformation.getNewMpaRequest().getId());
+            mpaService.getMpaById(filmUpdateInformation.getMpa().getId());
         }
 
         Film film = filmStorage.getFilmById(filmUpdateInformation.getId())
@@ -127,7 +127,7 @@ public class FilmService {
         List<GenreDto> genresDto;
         if (filmUpdateInformation.hasGenres()) {
             genreService.deleteGenreOfFilm(film.getId());
-            genresDto = genreService.addGenresOfFilm(film.getId(), filmUpdateInformation.getNewGenreRequests());
+            genresDto = genreService.addGenresOfFilm(film.getId(), filmUpdateInformation.getGenres());
         } else {
             genresDto = genreService.getGenreOfFilmById(film.getId());
         }
