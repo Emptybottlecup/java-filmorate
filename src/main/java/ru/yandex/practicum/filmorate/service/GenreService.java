@@ -28,24 +28,23 @@ public class GenreService {
         Map<Long, GenreDto> genreIdAndGenreDto = getAllGenres().stream()
                 .collect(Collectors.toMap(GenreDto::getId, genreDto -> genreDto));
 
-        return genresOfFilm.stream().map(genreAndFilm -> genreIdAndGenreDto.get(genreAndFilm.getIdGenre()))
-                .toList();
+        return genresOfFilm.stream()
+                .map(genreAndFilm -> genreIdAndGenreDto.get(genreAndFilm.getIdGenre())).toList();
     }
 
     public List<GenreAndFilmDto> getAllGenresAndFilms() {
         return genresAndFilmRepository.getAllGenresAndFilms().stream()
-                .map(GenreMapper::mapToGenreAndFilmDto)
-                .toList();
+                .map(GenreMapper::mapToGenreAndFilmDto).toList();
     }
 
     public List<GenreDto> getAllGenres() {
         return genreRepository.getAllGenres().stream()
-                .map(GenreMapper::mapToGenreDto)
-                .toList();
+                .map(GenreMapper::mapToGenreDto).toList();
     }
 
     public GenreDto getGenreById(long id) {
-        Genre genre = genreRepository.getGenreById(id).orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.GENRE));
+        Genre genre = genreRepository.getGenreById(id)
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.GENRE));
         return GenreMapper.mapToGenreDto(genre);
     }
 
@@ -56,7 +55,8 @@ public class GenreService {
             for (NewGenreRequest newGenreRequest : newGenreRequests) {
                 if (!setId.contains(newGenreRequest.getId())) {
                     long genreId = newGenreRequest.getId();
-                    Genre genreToAdd = genreRepository.getGenreById(genreId).orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
+                    Genre genreToAdd = genreRepository.getGenreById(genreId)
+                            .orElseThrow(() -> new NotFoundIdException(genreId, WhichObjectNotFound.GENRE));
 
                     if (genresAndFilmRepository.insertGenreAndFilm(filmId, genreId).isPresent()) {
                         setId.add(genreId);
@@ -71,5 +71,4 @@ public class GenreService {
     public void deleteGenreOfFilm(long filmId) {
         genresAndFilmRepository.deleteAllGenresOfFilmById(filmId);
     }
-
 }

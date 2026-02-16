@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.mappers;
 import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.dto.genre.GenreAndFilmDto;
 import ru.yandex.practicum.filmorate.dto.genre.GenreDto;
-import ru.yandex.practicum.filmorate.dto.genre.NewGenreRequest;
 import ru.yandex.practicum.filmorate.model.films.Genre;
 import ru.yandex.practicum.filmorate.model.films.GenreAndFilm;
 

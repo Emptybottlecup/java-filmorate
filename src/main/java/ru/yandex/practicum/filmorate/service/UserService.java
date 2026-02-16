@@ -26,18 +26,22 @@ public class UserService {
     private final FriendsService friendsService;
 
     public List<UserDto> getAllUsers() {
-        return userStorage.getAllUsers().stream().map(UserMapper::mapToUserDto).toList();
+        return userStorage.getAllUsers().stream()
+                .map(UserMapper::mapToUserDto)
+                .toList();
     }
 
     public UserDto getUser(Long id) {
-        return UserMapper.mapToUserDto(userStorage.getUserById(id).orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)));
+        return UserMapper.mapToUserDto(userStorage.getUserById(id)
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)));
     }
 
     public List<FriendDto> getFriendsById(Long id) {
         getUser(id);
 
         return friendsService.getFriendsById(id).stream()
-                .map(friends -> UserMapper.mapToFriendDto(getUser(friends.getIdFriendUser()), friends.isConfirmed()))
+                .map(friends -> UserMapper.mapToFriendDto(getUser(friends.getIdFriendUser()),
+                        friends.isConfirmed()))
                 .toList();
     }
 
@@ -71,9 +75,11 @@ public class UserService {
     public UserDto updateUserInformation(UserUpdateInformation userUpdateInformation) {
         Long id = userUpdateInformation.getId();
 
-        User user = UserMapper.updateUserInformation(userStorage.getUserById(id).orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)), userUpdateInformation);
+        User user = UserMapper.updateUserInformation(userStorage.getUserById(id)
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)), userUpdateInformation);
 
-        return UserMapper.mapToUserDto(userStorage.updateUserInformation(user).orElseThrow(() -> new InternalServerException("Не получилось обновить данные пользователя")));
+        return UserMapper.mapToUserDto(userStorage.updateUserInformation(user)
+                .orElseThrow(() -> new InternalServerException("Не получилось обновить данные пользователя")));
     }
 
     public void deleteUser(long id) {
@@ -88,6 +94,9 @@ public class UserService {
         getUser(idUser);
         getUser(idUserFriend);
 
-        return friendsService.getCommonFriends(idUser, idUserFriend).stream().map(friend -> UserMapper.mapToFriendDto(getUser(friend.getIdFriendUser()), friend.isConfirmed())).toList();
+        return friendsService.getCommonFriends(idUser, idUserFriend).stream()
+                .map(friend -> UserMapper.mapToFriendDto(getUser(friend.getIdFriendUser()),
+                        friend.isConfirmed()))
+                .toList();
     }
 }

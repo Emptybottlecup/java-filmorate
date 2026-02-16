@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.mappers;
 
 import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.dto.mpa.MpaDto;
-import ru.yandex.practicum.filmorate.dto.mpa.NewMpaRequest;
 import ru.yandex.practicum.filmorate.model.films.Mpa;
 
 @UtilityClass

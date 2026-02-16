@@ -18,8 +18,7 @@ public class MpaService {
 
     public List<MpaDto> getAllMpa() {
         return mpaRepository.getAllMpa().stream()
-                .map(MpaMapper::mapToMpaDto)
-                .toList();
+                .map(MpaMapper::mapToMpaDto).toList();
     }
 
     public MpaDto getMpaById(long id) {

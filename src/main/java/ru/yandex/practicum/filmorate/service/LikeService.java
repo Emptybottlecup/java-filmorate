@@ -16,7 +16,8 @@ public class LikeService {
     private final LikesRepository likesRepository;
 
     public LikeDto addLike(long idFilm, long idUser) {
-        Like like = likesRepository.addLike(idFilm, idUser).orElseThrow(() -> new InternalServerException("Не получилось добавить лайк"));
+        Like like = likesRepository.addLike(idFilm, idUser)
+                .orElseThrow(() -> new InternalServerException("Не получилось добавить лайк"));
         return LikeMapper.mapToLikeDto(like);
     }
 
@@ -26,7 +27,6 @@ public class LikeService {
 
     public List<LikeDto> getLikesOfFilm(long idUser) {
         return likesRepository.getLikesOfFilm(idUser).stream()
-                .map(LikeMapper::mapToLikeDto)
-                .toList();
+                .map(LikeMapper::mapToLikeDto).toList();
     }
 }

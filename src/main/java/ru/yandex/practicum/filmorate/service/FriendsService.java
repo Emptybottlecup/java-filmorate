@@ -18,7 +18,10 @@ public class FriendsService {
     }
 
     public Friends addFriends(long idUser, long idUserFriend) {
-        return friendsStorage.getFriendsConnectionsTwoUsers(idUser, idUserFriend).orElseGet(() -> friendsStorage.addFriends(idUser, idUserFriend).orElseThrow(() -> new InternalServerException(String.format("Не получилось отправить заявку в друзья к пользователю с id = %d", idUserFriend))));
+        return friendsStorage.getFriendsConnectionsTwoUsers(idUser, idUserFriend)
+                .orElseGet(() -> friendsStorage.addFriends(idUser, idUserFriend)
+                        .orElseThrow(() -> new InternalServerException(String.format("Не получилось отправить заявку в " +
+                                "друзья к пользователю с id = %d", idUserFriend))));
     }
 
     public void deleteFriends(long idUser, long idUserFriend) {
@@ -26,6 +29,8 @@ public class FriendsService {
     }
 
     public List<Friends> getCommonFriends(Long idUser, Long idUserFriend) {
-        return friendsStorage.getFriendsById(idUser).stream().filter(friend -> friendsStorage.getFriendsConnectionsTwoUsers(idUserFriend, friend.getIdFriendUser()).isPresent()).toList();
+        return friendsStorage.getFriendsById(idUser).stream()
+                .filter(friend -> friendsStorage.getFriendsConnectionsTwoUsers(idUserFriend,
+                        friend.getIdFriendUser()).isPresent()).toList();
     }
 }

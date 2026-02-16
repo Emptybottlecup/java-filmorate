@@ -18,7 +18,6 @@ import ru.yandex.practicum.filmorate.exceptions.NotFoundId.WhichObjectNotFound;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.model.films.Film;
-import ru.yandex.practicum.filmorate.model.films.GenreAndFilm;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
@@ -52,9 +51,10 @@ public class FilmService {
 
         return filmStorage.getAllFilms().stream()
                 .map(film -> {
-            List<GenreDto> genresDto = filmsIdAndGenresDto.getOrDefault(film.getId(), new ArrayList<>());
-            MpaDto mpaDto = mpaIdAndMpaDto.get(film.getIdMpa());
-            return FilmMapper.mapToFilmDto(film, mpaDto, genresDto);})
+                    List<GenreDto> genresDto = filmsIdAndGenresDto.getOrDefault(film.getId(), new ArrayList<>());
+                    MpaDto mpaDto = mpaIdAndMpaDto.get(film.getIdMpa());
+                    return FilmMapper.mapToFilmDto(film, mpaDto, genresDto);
+                })
                 .toList();
     }
 
@@ -76,7 +76,8 @@ public class FilmService {
 
         MpaDto mpa = mpaService.getMpaById(newFilmRequest.getMpa().getId());
 
-        Film film = filmStorage.addNewFilm(FilmMapper.createFilm(newFilmRequest)).orElseThrow(() -> new InternalServerException("Не получилось создать фильм"));
+        Film film = filmStorage.addNewFilm(FilmMapper.createFilm(newFilmRequest))
+                .orElseThrow(() -> new InternalServerException("Не получилось создать фильм"));
 
         List<GenreDto> genres = genreService.addGenresOfFilm(film.getId(), newFilmRequest.getGenres());
 
@@ -88,7 +89,10 @@ public class FilmService {
             log.warn("Неверное количество выводимых фильмов");
             throw new ConditionsNotMetException("Отсчет не может начинаться с отрицательного числа", "count");
         }
-        return getAllFilms().stream().sorted(Comparator.comparingInt((filmDto) -> likeService.getLikesOfFilm(filmDto.getId()).size() * -1)).limit(count).toList();
+        return getAllFilms().stream()
+                .sorted(Comparator.comparingInt((filmDto) -> likeService.getLikesOfFilm(filmDto.getId())
+                        .size() * -1)).limit(count)
+                .toList();
     }
 
     public void deleteLike(Long filmId, Long userId) {
@@ -114,7 +118,8 @@ public class FilmService {
             mpaService.getMpaById(filmUpdateInformation.getNewMpaRequest().getId());
         }
 
-        Film film = filmStorage.getFilmById(filmUpdateInformation.getId()).orElseThrow(() -> new NotFoundIdException(filmUpdateInformation.getId(), WhichObjectNotFound.FILM));
+        Film film = filmStorage.getFilmById(filmUpdateInformation.getId())
+                .orElseThrow(() -> new NotFoundIdException(filmUpdateInformation.getId(), WhichObjectNotFound.FILM));
 
 
         MpaDto mpaDto = mpaService.getMpaById(film.getIdMpa());
@@ -129,7 +134,8 @@ public class FilmService {
 
         FilmMapper.updateFilmInformation(film, filmUpdateInformation);
 
-        filmStorage.updateFilmInformation(film).orElseThrow(() -> new InternalServerException("Не получилось обновить данные фильма"));
+        filmStorage.updateFilmInformation(film)
+                .orElseThrow(() -> new InternalServerException("Не получилось обновить данные фильма"));
 
 
         return FilmMapper.mapToFilmDto(film, mpaDto, genresDto);
