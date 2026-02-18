@@ -1,93 +1,102 @@
 package ru.yandex.practicum.filmorate.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.exceptions.InternalServerException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundId.WhichObjectNotFound;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundId.NotFoundIdException;
+import ru.yandex.practicum.filmorate.dto.user.FriendDto;
+import ru.yandex.practicum.filmorate.dto.user.NewUserRequest;
+import ru.yandex.practicum.filmorate.dto.user.UserDto;
+import ru.yandex.practicum.filmorate.dto.user.UserUpdateInformation;
+import ru.yandex.practicum.filmorate.mappers.UserMapper;
+import ru.yandex.practicum.filmorate.model.users.Friends;
+import ru.yandex.practicum.filmorate.model.users.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
+    private final FriendsService friendsService;
 
-    public List<User> getAllUsers() {
-        return userStorage.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userStorage.getAllUsers().stream()
+                .map(UserMapper::mapToUserDto)
+                .toList();
     }
 
-    public User getUser(Long id) {
-        return userStorage.getUser(id);
+    public UserDto getUser(Long id) {
+        return UserMapper.mapToUserDto(userStorage.getUserById(id)
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)));
     }
 
-    public List<User> getCommonFriends(Long idUser, Long idOtherUser) {
-        List<User> friends = new ArrayList<>();
-        User user = userStorage.getUser(idUser);
-        User otherUser = userStorage.getUser(idOtherUser);
-        for (Long idFriend : user.getFriends()) {
-            if (otherUser.getFriends().contains(idFriend)) {
-                friends.add(userStorage.getUser(idFriend));
-            }
+    public List<FriendDto> getFriendsById(Long id) {
+        getUser(id);
+
+        return friendsService.getFriendsById(id).stream()
+                .map(friends -> UserMapper.mapToFriendDto(getUser(friends.getIdFriendUser()),
+                        friends.isConfirmed()))
+                .toList();
+    }
+
+    public FriendDto addFriends(long idUser, long idUserFriend) {
+        getUser(idUser);
+
+        UserDto userFriend = getUser(idUserFriend);
+
+        Friends friends = friendsService.addFriends(idUser, idUserFriend);
+
+        return UserMapper.mapToFriendDto(userFriend, friends.isConfirmed());
+    }
+
+    public void deleteFriends(long idUser, long idUserFriend) {
+        getUser(idUser);
+        getUser(idUserFriend);
+
+        friendsService.deleteFriends(idUser, idUserFriend);
+    }
+
+    public UserDto addUser(NewUserRequest newUserRequest) {
+        Optional<User> user = userStorage.addNewUser(UserMapper.createUser(newUserRequest));
+
+        if (user.isEmpty()) {
+            throw new InternalServerException("Сервер не смог создать такого пользователя");
         }
-        return friends;
+
+        return UserMapper.mapToUserDto(user.get());
     }
 
-    public List<User> getUserFriends(Long id) {
-        List<User> friends = new ArrayList<>();
-        User user = userStorage.getUser(id);
-        for (Long idFriend : user.getFriends()) {
-            friends.add(userStorage.getUser(idFriend));
+    public UserDto updateUserInformation(UserUpdateInformation userUpdateInformation) {
+        Long id = userUpdateInformation.getId();
+
+        User user = UserMapper.updateUserInformation(userStorage.getUserById(id)
+                .orElseThrow(() -> new NotFoundIdException(id, WhichObjectNotFound.USER)), userUpdateInformation);
+
+        return UserMapper.mapToUserDto(userStorage.updateUserInformation(user)
+                .orElseThrow(() -> new InternalServerException("Не получилось обновить данные пользователя")));
+    }
+
+    public void deleteUser(long id) {
+        getUser(id);
+
+        if (!userStorage.deleteUserById(id)) {
+            throw new InternalServerException("Не получилось удалить пользователя");
         }
-        return friends;
     }
 
-    public User addUser(@Valid @RequestBody User user) {
-        validateUser(user);
-        return userStorage.addNewUser(user);
-    }
+    public List<FriendDto> getCommonFriends(Long idUser, Long idUserFriend) {
+        getUser(idUser);
+        getUser(idUserFriend);
 
-    public User deleteFriends(Long idUser, Long idNewFriend) {
-        User user = userStorage.getUser(idUser);
-        User userFriend = userStorage.getUser(idNewFriend);
-        if (user.getFriends().remove(idNewFriend) && userFriend.getFriends().remove(idUser)) {
-            log.debug("Пользователи {} и {} перестали быть", user.getLogin(), userFriend.getLogin());
-        }
-        return user;
-    }
-
-    public User addFriends(Long idUser, Long idNewFriend) {
-        User user = userStorage.getUser(idUser);
-        User userFriend = userStorage.getUser(idNewFriend);
-        user.getFriends().add(idNewFriend);
-        userFriend.getFriends().add(idUser);
-        log.debug("Пользователи {} и {} стали друзьями", user.getLogin(), userFriend.getLogin());
-        return user;
-    }
-
-    public User putUser(User newUser) {
-        validateUser(newUser);
-        return userStorage.updateUserInformation(newUser);
-    }
-
-    public static boolean validateUser(User user) {
-        if (user.getEmail() == null || user.getEmail().isEmpty() || user.getEmail().isBlank() || !user.getEmail()
-                .contains("@")) {
-            log.warn("Ошибка валидации пользователя: {} email не может существовать", user.getEmail());
-            throw new ValidationException("Неверно указан email.");
-        } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.warn("Ошибка валидации пользователя: {} login не может существовать", user.getLogin());
-            throw new ValidationException("Неверно указан логин.");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.warn("Ошибка валидации пользователя: {} дата не валидна", user.getBirthday());
-            throw new ValidationException("Неверно указана дата рождения.");
-        }
-        return true;
+        return friendsService.getCommonFriends(idUser, idUserFriend).stream()
+                .map(friend -> UserMapper.mapToFriendDto(getUser(friend.getIdFriendUser()),
+                        friend.isConfirmed()))
+                .toList();
     }
 }
